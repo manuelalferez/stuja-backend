@@ -12,6 +12,14 @@ server.use(
   })
 );
 
+const loggedInMiddleware = (req, res, next) => {
+  if (req.session.user === "abc") {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+};
+
 server.get("/", (req, res) => {
   res.send(`<a href="/login">Login</a>`);
 });
@@ -24,12 +32,12 @@ server.get("/login", (req, res) => {
   }
 });
 
-server.get("/admin", (req, res) => {
-  if (req.session.user === "abc") {
-    res.send("Hello admin!");
-  } else {
-    res.redirect("/login");
-  }
+server.get("/admin", loggedInMiddleware, (req, res) => {
+  res.send("Hello admin!");
+});
+
+server.get("/users", loggedInMiddleware, (req, res) => {
+  res.send("Users list");
 });
 
 server.post("/login", (req, res) => {
