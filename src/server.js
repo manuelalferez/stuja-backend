@@ -10,8 +10,11 @@ server.get("/", (req, res) => {
 });
 
 server.post("/", (req, res) => {
-  console.log(req.body);
-  res.send("Hola post");
+  if (req.body.user === "abc" && req.body.password === "1234") {
+    res.send("Hello admin");
+  } else {
+    res.send("Goodbye");
+  }
 });
 
 server.listen(3000, () => {
